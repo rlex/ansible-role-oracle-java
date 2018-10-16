@@ -1,0 +1,12 @@
+- include_tasks: webupd8.yml
+  when: oracle_java_version == 8
+
+- include_tasks: linuxuprising.yml
+  when: oracle_java_version >= 10
+
+- name: "Set Oracle Java {{ oracle_java_version }} as default"
+  apt:
+    name:
+      - "oracle-java{{ oracle_java_version }}-set-default"
+    state: present
+  when: oracle_java_set_default

@@ -1,0 +1,24 @@
+- name: Download webupd8/java ppa apt key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 7B2C3B0889BF5709A105D03AC2518248EEA14886
+
+- name: Add webupd8/java repository
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main"
+    filename: "oracle_java"
+    state: present
+
+- name: Accept Oracle Java license
+  debconf:
+    name: oracle-java{{ oracle_java_version }}-installer
+    question: shared/accepted-oracle-license-v1-1
+    value: 'true'
+    vtype: select
+
+- name: "Install Oracle Java packages"
+  apt:
+    name:
+      - "oracle-java{{ oracle_java_version }}-installer"
+      - "oracle-java{{ oracle_java_version }}-unlimited-jce-policy"
+    state: present

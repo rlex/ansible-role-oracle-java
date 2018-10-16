@@ -1,0 +1,24 @@
+- name: Download linuxuprising/java ppa apt key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 1CC3D16E460A94EE17FE581CEA8CACC073C3DB2A
+
+- name: Add linuxuprising/java repository
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/linuxuprising/java/ubuntu xenial main"
+    filename: "oracle_java"
+    state: present
+
+- name: Accept Oracle Java license
+  debconf:
+    name: oracle-java{{ oracle_java_version }}-installer
+    question: shared/accepted-oracle-license-v1-2
+    value: "true"
+    vtype: select
+
+- name: "Install Oracle Java packages"
+  apt:
+    name:
+      - "oracle-java{{ oracle_java_version }}-installer"
+      - "oracle-java{{ oracle_java_version }}-set-default"
+    state: present
